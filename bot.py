@@ -464,17 +464,13 @@ async def delete_copies(alert: dict, msg_ids: list):
     save_db()
 
 
-async def main():
-    log.info("Duplicate Detector Bot start ho raha hai...")
-    await bot.start()
-    me = await bot.get_me()
-    log.info(f"Bot online hai: @{me.username} (id {me.id})")
-    log.info("Channel posts watch kar raha hoon. /start se DM mein test karo.")
-    from pyrogram import idle
-    await idle()
-    await bot.stop()
-
-
+# ---------- Run ----------
+# Pyrogram ka built-in runner use karo (bot.run) — ye event loop,
+# startup aur polling sab khud sambhalta hai. Manual
+# asyncio.run(main()) + bot.start() + idle() se bot updates poll
+# nahi kar pa raha tha (bot online dikhta tha par /start ka koi
+# reply nahi aata tha, aur koi alert nahi bhejta tha) — yehi bug
+# @Sanjilinkerbot mein bhi mila tha, aur bot.run() se fix hua tha.
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+    log.info("Duplicate Detector Bot start ho raha hai...")
+    bot.run()
