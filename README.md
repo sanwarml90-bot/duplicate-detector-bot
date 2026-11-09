@@ -6,6 +6,7 @@ Telegram channel mein duplicate files aur messages pakadne wala bot.
 - Channel mein admin banao ("Delete Messages" permission ke saath).
 - Har nayi post (file ya text) ko watch karta hai — naam + size ya text note karta hai.
 - Ek hi naam + ek hi size ki file dobara aaye (ya ek hi text dobara aaye) to owner ko DM mein alert bhejta hai.
+- Text duplicate **case-insensitive** hai — "hello", "Hello" aur "HELLO" ek hi mane jate hain (extra spaces bhi ignore hote hain). Chhota text (3+ characters) bhi pakda jata hai.
 - Alert mein options: **Delete All** / **Keep First, Delete Rest** / **Delete Selected** / **Keep**.
 
 ## Setup

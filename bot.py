@@ -37,7 +37,7 @@ OWNER_ID = int(os.getenv("OWNER_ID", "7966027018"))
 
 DB_FILE = "files.json"
 MAX_RECORDS = 5000
-MIN_TEXT_LEN = 20  # isse chhota text duplicate nahi mana jata
+MIN_TEXT_LEN = 3  # isse chhota text duplicate nahi mana jata ("hello" bhi pakda jayega)
 
 db = {"records": [], "ignored": [], "alerts": {}}
 
@@ -110,14 +110,17 @@ def media_of(message: Message):
 
 
 def text_key(message: Message):
-    """Sirf-text wali post ka duplicate key (None = text duplicate nahi)."""
+    """Sirf-text wali post ka duplicate key (None = text duplicate nahi).
+    Case-insensitive hai: "hello", "Hello" aur "HELLO" ek hi mane jate hain,
+    extra spaces/newlines bhi ignore hote hain."""
     text = (message.text or message.caption or "").strip()
     if message.document or message.video or message.audio or message.animation \
             or message.photo or message.voice or message.video_note:
         return None  # file wali post ka text/caption duplicate key nahi
     if len(text) < MIN_TEXT_LEN or text.startswith("/"):
         return None
-    h = hashlib.sha256(text.encode("utf-8", "ignore")).hexdigest()[:16]
+    norm = " ".join(text.split()).casefold()
+    h = hashlib.sha256(norm.encode("utf-8", "ignore")).hexdigest()[:16]
     return ("text", h, text)
 
 
